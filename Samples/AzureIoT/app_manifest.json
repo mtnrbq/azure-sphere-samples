@@ -3,11 +3,12 @@
   "Name": "AzureIoT",
   "ComponentId": "819255ff-8640-41fd-aea7-f85d34c491d5",
   "EntryPoint": "/bin/app",
-  "CmdArgs": [ ],
+  "CmdArgs": [ "--ScopeID", "0ne0049BBD6" ],
   "Capabilities": {
-    "AllowedConnections": [],
+    "AllowedConnections": ["global.azure-devices-provisioning.net","sphere-hub-masslinea.azure-devices.net"],
     "Gpio": [ "$SAMPLE_BUTTON_1", "$SAMPLE_BUTTON_2", "$SAMPLE_LED" ],
-    "DeviceAuthentication": "00000000-0000-0000-0000-000000000000"
+    "DeviceAuthentication": "a24a94d1-2fff-484a-ab9e-ac48f43e009d",
+    "I2cMaster": [ "$SAMPLE_SHT31_I2C" ]
   },
   "ApplicationType": "Default"
 }

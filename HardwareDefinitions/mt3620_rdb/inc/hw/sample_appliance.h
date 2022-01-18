@@ -47,6 +47,7 @@
 
 // MT3620 RDB: Connect external LSM6DS3 to I2C using header 4, pin 6 (SDA) and pin 12 (SCL)
 #define SAMPLE_LSM6DS3_I2C MT3620_RDB_HEADER4_ISU2_I2C
+#define SAMPLE_SHT31_I2C MT3620_RDB_HEADER4_ISU2_I2C
 
 // MT3620 RDB: Connect external LSM6DS3 to SPI using header 4, pin 5 (MISO), pin 7 (SCLK), pin 9 (CSA), pin 11 (MOSI)
 #define SAMPLE_LSM6DS3_SPI MT3620_RDB_HEADER4_ISU1_SPI

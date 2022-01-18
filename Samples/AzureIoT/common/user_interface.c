@@ -6,6 +6,7 @@
 
 #include <applibs/gpio.h>
 #include <applibs/log.h>
+#include <hw/sample_appliance.h>
 
 #include "user_interface.h"
 
@@ -20,7 +21,7 @@
 // You can also use hardware definitions related to all other peripherals on your dev board because
 // the sample_appliance header file recursively includes underlying hardware definition headers.
 // See https://aka.ms/azsphere-samples-hardwaredefinitions for further details on this feature.
-#include <hw/sample_appliance.h>
+
 
 #include "eventloop_timer_utilities.h"
 

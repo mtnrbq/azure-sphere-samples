@@ -32,12 +32,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <unistd.h>
 
 // applibs_versions.h defines the API struct versions to use for applibs APIs.
 #include "applibs_versions.h"
 #include <applibs/eventloop.h>
 #include <applibs/networking.h>
+#define I2C_STRUCTS_VERSION 1
+// DocID026899 Rev 10, S6.1.1, I2C operation
+// SDO is tied to ground so the least significant bit of the address is zero.
+#define sht31Address (0x44 << 1)
+#include <hw/sample_appliance.h>
+#include <applibs/i2c.h>
 #include <applibs/log.h>
 
 #include "eventloop_timer_utilities.h"
@@ -52,10 +59,15 @@ static volatile sig_atomic_t exitCode = ExitCode_Success;
 // Initialization/Cleanup
 static ExitCode InitPeripheralsAndHandlers(void);
 static void ClosePeripheralsAndHandlers(void);
+static void CloseFdAndPrintError(int fd, const char *fdName);
 
 // Interface callbacks
 static void ExitCodeCallbackHandler(ExitCode ec);
 static void ButtonPressedCallbackHandler(UserInterface_Button button);
+
+// I2C File descriptors - initialized to invalid value
+static int i2cFd = -1;
+
 
 // Cloud
 static const char *CloudResultToString(Cloud_Result result);
@@ -271,11 +283,55 @@ static ExitCode InitPeripheralsAndHandlers(void)
 
     UserInterface_SetStatus(telemetryUploadEnabled);
 
+    // I2C temperature
+    i2cFd = I2CMaster_Open(SAMPLE_SHT31_I2C);
+    if (i2cFd == -1) {
+        Log_Debug("ERROR: I2CMaster_Open: errno=%d (%s)\n", errno, strerror(errno));
+        return ExitCode_Init_OpenMaster;
+    }
+
+    int result = I2CMaster_SetBusSpeed(i2cFd, I2C_BUS_SPEED_STANDARD);
+    if (result != 0) {
+        Log_Debug("ERROR: I2CMaster_SetBusSpeed: errno=%d (%s)\n", errno, strerror(errno));
+        return ExitCode_Init_SetBusSpeed;
+    }
+
+    result = I2CMaster_SetTimeout(i2cFd, 100);
+    if (result != 0) {
+        Log_Debug("ERROR: I2CMaster_SetTimeout: errno=%d (%s)\n", errno, strerror(errno));
+        return ExitCode_Init_SetTimeout;
+    }
+
+    // This default address is used for POSIX read and write calls.  The AppLibs APIs take a target
+    // address argument for each read or write.
+    result = I2CMaster_SetDefaultTargetAddress(i2cFd, sht31Address);
+    if (result != 0) {
+        Log_Debug("ERROR: I2CMaster_SetDefaultTargetAddress: errno=%d (%s)\n", errno,
+                  strerror(errno));
+        return ExitCode_Init_SetDefaultTarget;
+    }
+
+
     void *connectionContext = Options_GetConnectionContext();
 
     return Cloud_Initialize(eventLoop, connectionContext, ExitCodeCallbackHandler,
                             CloudTelemetryUploadEnabledChangedCallbackHandler,
                             DisplayAlertCallbackHandler, ConnectionChangedCallbackHandler);
+}
+
+/// <summary>
+///     Closes a file descriptor and prints an error on failure.
+/// </summary>
+/// <param name="fd">File descriptor to close</param>
+/// <param name="fdName">File descriptor name to use in error message</param>
+static void CloseFdAndPrintError(int fd, const char *fdName)
+{
+    if (fd >= 0) {
+        int result = close(fd);
+        if (result != 0) {
+            Log_Debug("ERROR: Could not close fd %s: %s (%d).\n", fdName, strerror(errno), errno);
+        }
+    }
 }
 
 /// <summary>
@@ -290,4 +346,5 @@ static void ClosePeripheralsAndHandlers(void)
     EventLoop_Close(eventLoop);
 
     Log_Debug("Closing file descriptors\n");
+    CloseFdAndPrintError(i2cFd, "i2c");
 }

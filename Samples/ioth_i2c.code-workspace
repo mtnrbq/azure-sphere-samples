@@ -1,11 +1,19 @@
 {
 	"folders": [
-		{
-			"path": "AzureIoT"
-		},
-		{
-			"path": "I2C/I2C_LSM6DS3_HighLevelApp"
-		}
-	],
-  "settings": {}
+    {
+      "path": "AzureIoT"
+    },
+    {
+      "path": "I2C/I2C_LSM6DS3_HighLevelApp"
+    },
+    {
+      "path": "../HardwareDefinitions"
+    }
+  ],
+  "settings": {
+    "files.associations": {
+      "i2c.h": "c",
+      "sample_appliance.h": "c"
+    }
+  }
 }

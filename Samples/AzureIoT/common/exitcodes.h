@@ -55,6 +55,12 @@ typedef enum {
 
     ExitCode_Init_AzureIoTDoWorkTimer = 30,
     ExitCode_AzureIoTDoWorkTimer_Consume = 31,
+
+    //i2c exit codes
+    ExitCode_Init_SetDefaultTarget = 32,
+    ExitCode_Init_SetTimeout = 33,
+    ExitCode_Init_OpenMaster = 34,
+    ExitCode_Init_SetBusSpeed = 35,
 } ExitCode;
 
 /// <summary>

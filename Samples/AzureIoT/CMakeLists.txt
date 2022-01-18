@@ -14,7 +14,7 @@ add_subdirectory(common)
 
 # The subdirectory below can be set to one of IoTHub, DPS or IoTEdge, to include the code
 # particular to that connectivity scenario.
-add_subdirectory(IoTHub)
+add_subdirectory(DPS)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
                            ${CMAKE_SOURCE_DIR}/common
