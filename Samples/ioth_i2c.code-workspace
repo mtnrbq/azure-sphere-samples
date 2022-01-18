@@ -8,12 +8,16 @@
     },
     {
       "path": "../HardwareDefinitions"
+    },
+    {
+      "path": "../../../opt/azurespheresdk/Sysroots/11/usr/include"
     }
   ],
   "settings": {
     "files.associations": {
       "i2c.h": "c",
-      "sample_appliance.h": "c"
+      "sample_appliance.h": "c",
+      "ctype.h": "c"
     }
   }
 }

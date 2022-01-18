@@ -11,6 +11,8 @@ target_sources(${PROJECT_NAME}
     ${CMAKE_CURRENT_LIST_DIR}/exitcodes.h
     ${CMAKE_CURRENT_LIST_DIR}/user_interface.c
     ${CMAKE_CURRENT_LIST_DIR}/user_interface.h
+    ${CMAKE_CURRENT_LIST_DIR}/GroveTempHumiSHT31.c
+    ${CMAKE_CURRENT_LIST_DIR}/GroveTempHumiSHT31.h
     ${CMAKE_CURRENT_LIST_DIR}/main.c
     ${CMAKE_CURRENT_LIST_DIR}/options.h
     ${CMAKE_CURRENT_LIST_DIR}/parson.c

@@ -42,7 +42,7 @@
 #define I2C_STRUCTS_VERSION 1
 // DocID026899 Rev 10, S6.1.1, I2C operation
 // SDO is tied to ground so the least significant bit of the address is zero.
-#define sht31Address (0x44 << 1)
+#define sht31Address 0x44
 #include <hw/sample_appliance.h>
 #include <applibs/i2c.h>
 #include <applibs/log.h>
